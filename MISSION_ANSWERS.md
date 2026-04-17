@@ -5,30 +5,27 @@
 > **Date:** 17/4/2026
 
 ---
-
-##  Submission Requirements
-
-Submit a **GitHub repository** containing:
-
-### 1. Mission Answers (40 points)
-
-Create a file `MISSION_ANSWERS.md` with your answers to all exercises:
-
-```markdown
 # Day 12 Lab - Mission Answers
 
 ## Part 1: Localhost vs Production
 
 ### Exercise 1.1: Anti-patterns found
-1. [Your answer]
-2. [Your answer]
+1.API key hardcode trong code -> Nếu push lên GitHub → key bị lộ ngay lập tức
+2. Vấn đề 2: Không có config management
+3.  Vấn đề 3: Print thay vì proper logging
+4. Vấn đề 4: Không có health check endpoint ->Nếu agent crash, platform không biết để restart
+5. Port cố định — không đọc từ environment. Trên Railway/Render, PORT được inject qua env var
 ...
 
 ### Exercise 1.3: Comparison table
 | Feature | Develop | Production | Why Important? |
 |---------|---------|------------|----------------|
-| Config  | ...     | ...        | ...            |
-...
+| Config / Secrets | Hardcode trong code | Đọc từ Environment variables | Bảo mật (không lọt key lên GitHub), dễ thay đổi theo môi trường (Tách biệt code và config). |
+| Logging | Dùng lệnh `print()` | Structured JSON logging | Dễ truy xuất lỗi, có format chuẩn cho log aggregator, tránh in nhầm secret. |
+| Host Binding | `localhost` | `0.0.0.0` | `0.0.0.0` cho phép app nhận traffic từ bên ngoài khi chạy trong Docker/Cloud. |
+| Port | Hardcode port `8000` | Đọc từ biến `PORT` | Trên Cloud (Railway, Render), port được gán tự động động (dynamic). |
+| Health Check | Không có | Có các endpoint `/health`, `/ready` | Giúp Cloud platform biết khi nào app crash để tự động restart. |
+| Lifecycle | Bị ngắt ngang lập tức | Graceful shutdown (với `lifespan`) | Chờ hoàn thành nốt các request đang dang dở trước khi tắt app hoàn toàn. |
 
 ## Part 2: Docker
 
