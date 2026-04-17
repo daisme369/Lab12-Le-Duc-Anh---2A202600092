@@ -51,13 +51,54 @@
 ## Part 3: Cloud Deployment
 
 ### Exercise 3.1: Railway deployment
-- URL: https://your-app.railway.app
+- URL: https://lab12-production-b776.up.railway.app
 - Screenshot: [Link to screenshot in repo]
 
 ## Part 4: API Security
+- Trong `develop/app.py`:
+  - API Key được client gửi lên thông qua HTTP Header tên là X-API-Key.
+  - Việc kiểm tra diễn ra bên trong hàm verify_api_key
+  - Hàm này được tiêm (inject) dưới dạng một Dependency (Depends(verify_api_key)) vào endpoint cần bảo vệ là POST /ask
+
+  Nếu sai key:
+   - Nếu không truyền key (thiếu header X-API-Key): Sẽ bị trả về mã lỗi HTTP 401 Unauthorized kèm thông báo "Missing API key. Include header: X-API-Key: <your-key>".
+   - Nếu truyền sai key (key không khớp): Sẽ bị ngắt và trả về mã lỗi HTTP 403 Forbidden kèm thông báo "Invalid API key."
+
+  - Để rotate key:
+    Cập nhật lại giá trị biến môi trường AGENT_API_KEY trên server.
+    Khởi động lại (Restart) ứng dụng/container FastAPI thì nó mới nhận giá trị key mới.
 
 ### Exercise 4.1-4.3: Test results
-[Paste your test outputs]
+ - **4.1**
+{
+    "detail": "Missing API key. Include header: X-API-Key: <your-key>"
+}
+
+{
+    "detail": "Invalid API key."
+}
+
+ - **4.2**
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHVkZW50Iiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzY0Mzk2ODQsImV4cCI6MTc3NjQ0MzI4NH0.msCCKhuVvJeJ2CjwjX036H73vYCbl4m4Vy5GfvCpv8E",
+    "token_type": "bearer",
+    "expires_in_minutes": 60,
+    "hint": "Include in header: Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
+}
+
+{
+    "question": "Explain JWT",
+    "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+    "usage": {
+        "requests_remaining": 9,
+        "budget_remaining_usd": 1.6e-05
+    }
+}
+
+ - **4.3**
+- **Algorithm:** Sliding Window Counter
+- **Limit:** Student (10 req/min), Teacher (100 req/min)
+- **Bypass limit cho admin:** Thay vì bypass, cấp thêm limitation cao hơn cho admin/ teacher
 
 ### Exercise 4.4: Cost guard implementation
 [Explain your approach]
