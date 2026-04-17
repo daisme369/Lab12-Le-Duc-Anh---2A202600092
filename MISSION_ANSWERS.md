@@ -30,14 +30,23 @@
 ## Part 2: Docker
 
 ### Exercise 2.1: Dockerfile questions
-1. Base image: [Your answer]
-2. Working directory: [Your answer]
+1. Base image: Là môi trường cài sẵn các thư viện cần thiết để chạy ứng dụng từ provider thay vì phải cài đặt thử công
+2. Working directory: Directory gốc chứa code của ứng dụng
+3. Cần copy requirements trước vì: 
+  - Để khi pip install có requirements 
+  - Sử dụng cache của Docker để lưu được short memory, thay vì mỗi khi chạy app phải caiaf lại
+4. CMD và ENTRYPOINT: 
+  - CMD: Lệnh mặc định sẽ chạy khi container khởi động
+  - ENTRYPOINT: Lệnh sẽ được chạy khi container khởi động
 ...
 
 ### Exercise 2.3: Image size comparison
-- Develop: [X] MB
-- Production: [Y] MB
-- Difference: [Z]%
+- Develop: 1.66GB
+- Production: 236 MB
+- Difference: 85.78%
+
+### Exercise 2.4:  Docker Compose stask
+
 
 ## Part 3: Cloud Deployment
 
